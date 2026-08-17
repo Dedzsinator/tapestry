@@ -28,7 +28,7 @@ echo "==> Building and starting stack on spark2"
 ssh spark-acn@"$SPARK2" "
   cd $REMOTE_DIR
   docker compose build --pull
-  docker compose up -d
+  docker compose up -d --remove-orphans
   docker compose ps
 "
 
