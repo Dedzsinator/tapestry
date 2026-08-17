@@ -1,0 +1,7 @@
+fastembed==0.4.2
+qdrant-client==1.9.2
+neo4j==5.26.0
+tiktoken==0.7.0
+watchdog==4.0.1
+fastapi==0.111.0
+uvicorn[standard]==0.29.0

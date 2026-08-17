@@ -1,0 +1,23 @@
+# secrets — never commit
+.env
+*.env
+*.secrets
+
+# Go
+fde-rag/go.sum
+fde-rag/vendor/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# Editor / OS
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Deployment artifacts
+fde-rag-stack-*.tar
