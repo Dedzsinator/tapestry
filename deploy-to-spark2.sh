@@ -17,7 +17,7 @@ fi
 echo "==> Syncing stack to spark2:$REMOTE_DIR"
 ssh spark-acn@"$SPARK2" "mkdir -p $REMOTE_DIR"
 rsync -av --delete \
-  --exclude='fde-rag/go.sum' \
+  --exclude='rag/go.sum' \
   "$(dirname "$0")/" \
   "spark-acn@${SPARK2}:${REMOTE_DIR}/"
 

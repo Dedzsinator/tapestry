@@ -64,7 +64,7 @@ func initQdrant() {
 	qdrantClient = pb.NewPointsClient(conn)
 }
 
-// ── embedding helpers (call fde-ingest) ───────────────────────────────────────
+// ── embedding helpers (call ingest) ───────────────────────────────────────────
 
 func httpPost(url string, body any, dst any) error {
 	b, _ := json.Marshal(body)
@@ -344,20 +344,20 @@ func main() {
 	initNeo4j()
 	initLLM()
 
-	// Wait for fde-ingest embed service to be ready
+	// Wait for ingest embed service to be ready
 	for i := 0; i < 30; i++ {
 		resp, err := http.Get(embedURL + "/health") //nolint:gosec
 		if err == nil && resp.StatusCode == 200 {
 			resp.Body.Close()
-			log.Println("[fde-rag] embed service ready")
+			log.Println("[tapestry] embed service ready")
 			break
 		}
-		log.Printf("[fde-rag] waiting for embed service (%d/30)...", i+1)
+		log.Printf("[tapestry] waiting for embed service (%d/30)...", i+1)
 		time.Sleep(5 * time.Second)
 	}
 
 	// MCP server
-	mcpSrv := server.NewMCPServer("fde-rag", "1.0.0",
+	mcpSrv := server.NewMCPServer("tapestry", "1.0.0",
 		server.WithToolCapabilities(false),
 	)
 	mcpSrv.AddTool(mcp.NewTool("search_vault",
@@ -385,7 +385,7 @@ func main() {
 	mux.Handle("/mcp/", httpSrv)
 
 	addr := "0.0.0.0:" + port
-	log.Printf("[fde-rag] listening on %s (MCP at /mcp)", addr)
+	log.Printf("[tapestry] listening on %s (MCP at /mcp)", addr)
 	if err := http.ListenAndServe(addr, mux); err != nil { //nolint:gosec
 		log.Fatal(err)
 	}

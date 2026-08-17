@@ -9,7 +9,7 @@ Vault (.md .pdf .docx .xlsx .csv .pptx .svg)
         │
         ▼
 ┌──────────────────────┐
-│   fde-ingest         │  Python · :7910
+│   ingest         │  Python · :7910
 │                      │
 │  watchdog file mon   │
 │  SHA256 change-skip  │
@@ -20,14 +20,14 @@ Vault (.md .pdf .docx .xlsx .csv .pptx .svg)
 │  ms-marco reranker   │
 │  wikilink graph      │  → Neo4j   fde-rag database
 │                      │
-│  /embed              │  ← called by fde-rag at query time
+│  /embed              │  ← called by rag at query time
 │  /embed-sparse       │
 │  /rerank             │
 └──────────────────────┘
         │
         ▼
 ┌──────────────────────┐
-│   fde-rag            │  Go · :7900
+│   rag                │  Go · :7900
 │                      │
 │  Qdrant gRPC         │
 │  Prefetch dense+     │
@@ -48,8 +48,8 @@ Vault (.md .pdf .docx .xlsx .csv .pptx .svg)
 
 | Service | Lang | Port | Role |
 |---|---|---|---|
-| `fde-ingest` | Python | :7910 | Embed API + vault watcher + Qdrant indexer + Neo4j graph |
-| `fde-rag` | Go | :7900 | Hybrid search + RRF + rerank + LLM answer + MCP server |
+| `ingest` | Python | :7910 | Embed API + vault watcher + Qdrant indexer + Neo4j graph |
+| `rag` | Go | :7900 | Hybrid search + RRF + rerank + LLM answer + MCP server |
 
 ## Prerequisites
 
@@ -102,17 +102,17 @@ Add to your agent config (dsh / pi):
 
 ## Search pipeline detail
 
-1. Query → fde-ingest `/embed` (768-dim nomic-embed-text-v1.5)
-2. Query → fde-ingest `/embed-sparse` (SPLADE PP en v1)
+1. Query → ingest `/embed` (768-dim nomic-embed-text-v1.5)
+2. Query → ingest `/embed-sparse` (SPLADE PP en v1)
 3. Qdrant gRPC `QueryPoints` with two `Prefetch` legs → server-side `FusionQuery(RRF)`
 4. Neo4j 1-hop wikilink expansion (graph context)
-5. fde-ingest `/rerank` (ms-marco-MiniLM-L-6-v2 cross-encoder)
+5. ingest `/rerank` (ms-marco-MiniLM-L-6-v2 cross-encoder)
 6. Top-k hits → Qwen LLM for `/ask` responses
 
 ## Running tests
 
 ```bash
-cd fde-rag
+cd rag
 RAG_URL=http://localhost:7900 EMBED_URL=http://localhost:7910 \
-  go test -v -timeout 120s ./cmd/fde-rag/ -run Test
+  go test -v -timeout 120s ./cmd/rag/ -run Test
 ```

@@ -1,6 +1,6 @@
 services:
-  fde-ingest:
-    build: ./fde-ingest
+  ingest:
+    build: ./ingest
     network_mode: host
     volumes:
       - /opt/fde/obsidian/fde-vault:/vault:ro
@@ -13,8 +13,8 @@ services:
       EMBED_PORT: "7910"
     restart: unless-stopped
 
-  fde-rag:
-    build: ./fde-rag
+  rag:
+    build: ./rag
     network_mode: host
     environment:
       EMBED_URL: http://localhost:7910
@@ -28,4 +28,4 @@ services:
       PORT: "7900"
     restart: unless-stopped
     depends_on:
-      - fde-ingest
+      - ingest

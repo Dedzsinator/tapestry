@@ -1,4 +1,4 @@
-module github.com/fde/fde-rag
+module github.com/Dedzsinator/tapestry/rag
 
 go 1.23
 
