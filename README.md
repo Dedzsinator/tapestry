@@ -5,13 +5,15 @@ Hybrid agentic RAG pipeline for Obsidian knowledge vaults. Weaves dense vectors,
 ## Architecture
 
 ```
-Obsidian vault (.md files)
+Vault (.md .pdf .docx .xlsx .csv .pptx .svg)
         │
         ▼
 ┌──────────────────────┐
 │   fde-ingest         │  Python · :7910
 │                      │
 │  watchdog file mon   │
+│  SHA256 change-skip  │
+│  parallel extraction │
 │  tiktoken chunker    │
 │  nomic-embed dense   │  → Qdrant  obsidian_hybrid
 │  SPLADE sparse       │     dense(768) + sparse
